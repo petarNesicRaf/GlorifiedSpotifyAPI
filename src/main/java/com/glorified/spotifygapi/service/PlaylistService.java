@@ -20,8 +20,9 @@ public class PlaylistService {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonResponse = objectMapper.readTree(response);
-            List<JsonNode> items = jsonResponse.get("items").findValues("items");
+            JsonNode items = jsonResponse.get("items");
             List<Playlist> playlists = new ArrayList<>();
+
             for(JsonNode item:items)
             {
                 Playlist playlist = new Playlist();
@@ -32,14 +33,33 @@ public class PlaylistService {
                 playlist.setUserId(item.get("owner").get("id").asText());
                 playlist.setTracks(item.get("tracks").get("href").asText());
                 playlist.setNumOfTracks(item.get("tracks").get("total").asInt());
-                playlist.setImageLarge(item.get("images").get(0).get("url").asText());
-                playlist.setImageMedium(item.get("images").get(1).get("url").asText());
-                playlist.setImageSmall(item.get("images").get(2).get("url").asText());
+                JsonNode images = item.get("images");
+                if(images != null && images.isArray()) {
+                    JsonNode firstImageNode = images.size() > 0 ? images.get(0) : null;
+                    JsonNode secondImageNode = images.size() > 1 ? images.get(1) : null;
+                    JsonNode thirdImageNode = images.size() > 2 ? images.get(2) : null;
+
+                    playlist.setImageLarge(
+                            getImageUrlOrDefault(firstImageNode, "large")
+                    );
+
+                    playlist.setImageMedium(
+                            getImageUrlOrDefault(secondImageNode, "medium")
+                    );
+
+                    playlist.setImageSmall(
+                            getImageUrlOrDefault(thirdImageNode, "small")
+                    );
+                }else{
+                    playlist.setImageLarge("null");
+                    playlist.setImageMedium("null");
+                    playlist.setImageSmall("null");
+                }
+
                 if(item.get("collaborative").asBoolean())
                     playlist.setCollaborative(1);
                 else    playlist.setCollaborative(0);
 
-                // Now you can work with the 'playlistData' object that contains the extracted fields
                 System.out.println("Name: " + playlist.getName());
                 System.out.println("Description: " + playlist.getDescription());
                 System.out.println("ID: " + playlist.getId());
@@ -54,7 +74,13 @@ public class PlaylistService {
         }
 
     }
-
+    private String getImageUrlOrDefault(JsonNode imageNode, String size) {
+        if (imageNode != null && !imageNode.isMissingNode() && imageNode.has("url")) {
+            return imageNode.get("url").asText();
+        } else {
+            return "null"; // Or set a default URL or handle it as needed
+        }
+    }
 
     public List<Playlist> getAllPlaylist()
     {
