@@ -81,4 +81,26 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String getPlaylistID(String playlistName) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = this.newConnection().prepareStatement("SELECT tracks FROM playlists WHERE playlist_name = ?");
+            statement.setString(1, playlistName);
+            resultSet = statement.executeQuery();
+            String playlistID = "";
+            while(resultSet.next())
+            {
+                playlistID = resultSet.getString("tracks");
+            }
+
+            return playlistID;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

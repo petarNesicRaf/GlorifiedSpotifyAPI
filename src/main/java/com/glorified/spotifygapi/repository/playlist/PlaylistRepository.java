@@ -10,4 +10,5 @@ public interface PlaylistRepository {
 
     public List<Playlist> getAllPlaylists();
 
+    public String getPlaylistID(String playlistName);
 }

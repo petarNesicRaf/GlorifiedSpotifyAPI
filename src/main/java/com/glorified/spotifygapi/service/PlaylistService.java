@@ -87,5 +87,8 @@ public class PlaylistService {
         return this.playlistRepository.getAllPlaylists();
     }
 
-
+    public String getPlaylistID(String playlistName)
+    {
+       return playlistRepository.getPlaylistID(playlistName);
+    }
 }
