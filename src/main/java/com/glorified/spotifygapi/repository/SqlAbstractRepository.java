@@ -38,7 +38,7 @@ public abstract class SqlAbstractRepository {
     }
 
     protected String getPassword() {
-        return "root";
+        return "pastetavegeta789";
     }
 
     protected void closeStatement(Statement statement) {

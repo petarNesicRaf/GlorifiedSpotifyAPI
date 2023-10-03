@@ -1,5 +1,7 @@
 package com.glorified.spotifygapi.resources;
 
+import com.glorified.spotifygapi.models.playlist.Playlist;
+import com.glorified.spotifygapi.service.PlaylistService;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -7,17 +9,21 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.List;
 
 @Path("/playlists")
 public class PlaylistResource {
 
+    @Inject
+    PlaylistService playlistService;
     @GET
-    public Response getUserPlaylists()
+    public Response fetchAndInsert()
     {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/me/playlists?limit=50&offset=0");
@@ -28,7 +34,12 @@ public class PlaylistResource {
             if (httpResponse.getStatusLine().getStatusCode() == 200)
             {
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
-                return Response.ok(responseBody, MediaType.APPLICATION_JSON).build();
+
+                playlistService.deleteInsertPlaylist(responseBody);
+
+                List<Playlist> allPlaylists = this.playlistService.getAllPlaylist();
+                return Response.ok(allPlaylists, MediaType.APPLICATION_JSON).build();
+
             }else{
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
                 return Response.status(httpResponse.getStatusLine().getStatusCode()).entity(responseBody).build();
@@ -37,7 +48,8 @@ public class PlaylistResource {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+
 
 }

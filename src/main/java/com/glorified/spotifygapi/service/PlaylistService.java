@@ -39,6 +39,11 @@ public class PlaylistService {
                     playlist.setCollaborative(1);
                 else    playlist.setCollaborative(0);
 
+                // Now you can work with the 'playlistData' object that contains the extracted fields
+                System.out.println("Name: " + playlist.getName());
+                System.out.println("Description: " + playlist.getDescription());
+                System.out.println("ID: " + playlist.getId());
+
                 playlists.add(playlist);
             }
 
@@ -49,5 +54,12 @@ public class PlaylistService {
         }
 
     }
+
+
+    public List<Playlist> getAllPlaylist()
+    {
+        return this.playlistRepository.getAllPlaylists();
+    }
+
 
 }

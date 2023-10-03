@@ -40,6 +40,10 @@ public class Playlist {
         this.collaborative = collaborative;
     }
 
+    public int getCollaborative() {
+        return collaborative;
+    }
+
     public int getId() {
         return id;
     }
