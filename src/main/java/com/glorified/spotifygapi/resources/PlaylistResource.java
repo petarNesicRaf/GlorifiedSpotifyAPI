@@ -1,6 +1,7 @@
 package com.glorified.spotifygapi.resources;
 
 import com.glorified.spotifygapi.models.playlist.Playlist;
+import com.glorified.spotifygapi.models.track.Track;
 import com.glorified.spotifygapi.service.PlaylistService;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -87,9 +88,9 @@ public class PlaylistResource {
             HttpResponse httpResponse = httpClient.execute(httpGet);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
+                List<Track> tracks = playlistService.insertTracksFromPlaylist(responseBody);
 
-                return Response.ok(responseBody, MediaType.APPLICATION_JSON).build();
-
+                return Response.ok(tracks, MediaType.APPLICATION_JSON).build();
             } else {
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
                 return Response.status(httpResponse.getStatusLine().getStatusCode()).entity(responseBody).build();
