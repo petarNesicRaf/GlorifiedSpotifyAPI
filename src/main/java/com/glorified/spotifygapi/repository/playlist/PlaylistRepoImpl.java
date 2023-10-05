@@ -111,9 +111,9 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
+
         try {
             connection = this.newConnection();
-
             //temporary
             preparedStatement = connection.prepareStatement(
                     "DELETE FROM tracks"

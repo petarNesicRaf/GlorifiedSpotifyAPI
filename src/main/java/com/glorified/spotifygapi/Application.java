@@ -2,7 +2,10 @@ package com.glorified.spotifygapi;
 
 import com.glorified.spotifygapi.repository.playlist.PlaylistRepoImpl;
 import com.glorified.spotifygapi.repository.playlist.PlaylistRepository;
+import com.glorified.spotifygapi.repository.tracks.TrackRepoImpl;
+import com.glorified.spotifygapi.repository.tracks.TrackRepository;
 import com.glorified.spotifygapi.service.PlaylistService;
+import com.glorified.spotifygapi.service.TrackService;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -20,6 +23,9 @@ public class Application extends ResourceConfig {
 
                 this.bind(PlaylistRepoImpl.class).to(PlaylistRepository.class).in(Singleton.class);
                 this.bindAsContract(PlaylistService.class);
+
+                this.bind(TrackRepoImpl.class).to(TrackRepository.class).in(Singleton.class);
+                this.bindAsContract(TrackService.class);
 
             }
         };
