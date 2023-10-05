@@ -29,14 +29,21 @@ public class TrackResource {
 
     @GET
     @Path("/analysis")
-    public Response getTracksAnalysis(@QueryParam("ids") String id)
+    public Response getTracksAnalysis(@QueryParam("id") List<String> ids)
     {
-        String[] IDs = id.split(",");
-        List<String> listIDs = Arrays.asList(IDs);
+        //String[] IDs = id.split(",");
+        //List<String> listIDs = Arrays.asList(IDs);
+        String list = "ids=";
+        for(String s:ids)
+        {
 
+            list += s;
+            list +=",";
+        }
+        list = list.substring(0, list.length()-1);
         HttpClient httpClient = HttpClients.createDefault();
 
-        HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/audio-features/"+id);
+        HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/audio-features?"+list);
         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
 
         try {
@@ -44,7 +51,7 @@ public class TrackResource {
             String responseBody = EntityUtils.toString(response.getEntity());
             if (response.getStatusLine().getStatusCode() == 200)
             {
-                List<TrackFeatures> features = trackService.insertTrackFeatures(responseBody, listIDs);
+                List<TrackFeatures> features = trackService.insertTrackFeatures(responseBody, ids);
                 return Response.ok(features, MediaType.APPLICATION_JSON).build();
             }else{
                 return Response.status(response.getStatusLine().getStatusCode()).entity(responseBody).build();

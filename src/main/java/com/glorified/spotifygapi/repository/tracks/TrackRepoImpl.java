@@ -32,7 +32,7 @@ public class TrackRepoImpl extends SqlAbstractRepository implements TrackReposit
 
             for(TrackFeatures tf:trackFeatures) {
                 preparedStatement = connection.prepareStatement(
-                        "INSERT INTO track_features(track_id, analysis_id, acousticness, dancebility, energy, instrumentalness, key, liveness, loudness, modality, speechiness, bpm, time_signature, valence, href) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                        "INSERT INTO track_features (track_id, analysis_id, acousticness, dancebility, energy, instrumentalness, key_tone, liveness, loudness, modality, speechiness, bpm, time_signature, valence, href) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                         ,generatedColumns
                 );
                 preparedStatement.setString(1,tf.getTrackID());
@@ -68,7 +68,7 @@ public class TrackRepoImpl extends SqlAbstractRepository implements TrackReposit
                     tf.setDancebility(resultSet.getDouble("dancebility"));
                     tf.setEnergy(resultSet.getDouble("energy"));
                     tf.setInstrumentalness(resultSet.getDouble("instrumentalness"));
-                    tf.setKey(resultSet.getDouble("key"));
+                    tf.setKey(resultSet.getDouble("key_tone"));
                     tf.setLiveness(resultSet.getDouble("liveness"));
                     tf.setLoudness(resultSet.getDouble("loudness"));
                     tf.setModality(resultSet.getDouble("modality"));
