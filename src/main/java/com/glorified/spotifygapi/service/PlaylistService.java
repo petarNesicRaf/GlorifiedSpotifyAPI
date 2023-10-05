@@ -35,23 +35,6 @@ public class PlaylistService {
         }
 
     }
-    private String getImageUrlOrDefault(JsonNode imageNode, String size) {
-        if (imageNode != null && !imageNode.isMissingNode() && imageNode.has("url")) {
-            return imageNode.get("url").asText();
-        } else {
-            return "null"; // Or set a default URL or handle it as needed
-        }
-    }
-
-    public List<Playlist> getAllPlaylist()
-    {
-        return this.playlistRepository.getAllPlaylists();
-    }
-
-    public String getPlaylistID(String playlistName)
-    {
-       return playlistRepository.getPlaylistID(playlistName);
-    }
 
     public List<Track> insertTracksFromPlaylist(String response)
     {
@@ -74,6 +57,26 @@ public class PlaylistService {
         }
 
     }
+
+
+    private String getImageUrlOrDefault(JsonNode imageNode, String size) {
+        if (imageNode != null && !imageNode.isMissingNode() && imageNode.has("url")) {
+            return imageNode.get("url").asText();
+        } else {
+            return "null"; // Or set a default URL or handle it as needed
+        }
+    }
+
+    public List<Playlist> getAllPlaylist()
+    {
+        return this.playlistRepository.getAllPlaylists();
+    }
+
+    public String getPlaylistID(String playlistName)
+    {
+        return playlistRepository.getPlaylistID(playlistName);
+    }
+
     private Playlist deserializePlaylists(JsonNode item)
     {
         Playlist playlist = new Playlist();
@@ -125,8 +128,8 @@ public class PlaylistService {
     {
         Track track = new Track();
         track.setAddedAt(item.get("added_at").asText());
-        track.setAddedByHref(item.get("track").get("added_by").get("href").asText());
-        track.setAddedByID(item.get("track").get("added_by").get("id").asText());
+        track.setAddedByHref(item.get("added_by").get("href").asText());
+        track.setAddedByID(item.get("added_by").get("id").asText());
         track.setDuration(item.get("track").get("duration_ms").asText());
         track.setTrackHref(item.get("track").get("href").asText());
         track.setTrackName(item.get("track").get("name").asText());
@@ -137,8 +140,20 @@ public class PlaylistService {
         track.setVideoThumbnail(item.get("video_thumbnail").get("url").asText());
         track.setPreviewUrl(item.get("track").get("preview_url").asText());
         //ovde za dodavanje artista sa zarezom mora da se nadje bolja solucija ovo je glupost
-        track.setArtistsNames(item.get("track").get("artists").get("name").asText());
-        track.setArtistsIDs(item.get("track").get("artists").get("id").asText());
+        JsonNode artists = item.get("track").get("artists");
+        String artistName = "";
+        String artistID = "";
+        for(JsonNode artist :artists)
+        {
+            artistName.concat(artist.get("name").asText());
+            artistName.concat(",");
+
+            artistID.concat(artist.get("id").asText());
+            artistID.concat(",");
+        }
+
+        track.setArtistsNames(artistName);
+        track.setArtistsIDs(artistID);
         track.setAlbumName(item.get("track").get("album").get("name").asText());
         track.setAlbumID(item.get("track").get("album").get("id").asText());
         track.setAlbumType(item.get("track").get("album").get("type").asText());
