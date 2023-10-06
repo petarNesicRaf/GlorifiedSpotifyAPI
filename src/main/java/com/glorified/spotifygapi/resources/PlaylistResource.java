@@ -51,29 +51,6 @@ public class PlaylistResource {
         }
     }
 
-    @GET
-    @Path("/playlist_json")
-    public Response getPlaylist() {
-        HttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/me/playlists?limit=50&offset=0");
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
-
-        try {
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                String responseBody = EntityUtils.toString(httpResponse.getEntity());
-
-                return Response.ok(responseBody, MediaType.APPLICATION_JSON).build();
-
-            } else {
-                String responseBody = EntityUtils.toString(httpResponse.getEntity());
-                return Response.status(httpResponse.getStatusLine().getStatusCode()).entity(responseBody).build();
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @GET
     @Path("/tracks/{name}")
@@ -100,5 +77,11 @@ public class PlaylistResource {
             throw new RuntimeException(e);
         }
     }
+    /*
+    public Response getPlaylistTrackFeatures(int playlistID)
+    {
+        playlistService.getPlaylistByID(playlistID);
+    }
 
+     */
 }

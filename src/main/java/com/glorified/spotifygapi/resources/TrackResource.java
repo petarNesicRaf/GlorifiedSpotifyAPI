@@ -31,8 +31,6 @@ public class TrackResource {
     @Path("/analysis")
     public Response getTracksAnalysis(@QueryParam("id") List<String> ids)
     {
-        //String[] IDs = id.split(",");
-        //List<String> listIDs = Arrays.asList(IDs);
         String list = "ids=";
         for(String s:ids)
         {
@@ -60,4 +58,6 @@ public class TrackResource {
             throw new RuntimeException(e);
         }
     }
+
+
 }
