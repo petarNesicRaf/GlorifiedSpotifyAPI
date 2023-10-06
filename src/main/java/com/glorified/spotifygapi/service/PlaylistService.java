@@ -36,7 +36,7 @@ public class PlaylistService {
 
     }
 
-    public List<Track> insertTracksFromPlaylist(String response)
+    public List<Track> insertTracksFromPlaylist(String response, String id)
     {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -50,7 +50,7 @@ public class PlaylistService {
                 tracks.add(track);
             }
 
-            return playlistRepository.insertTracksFromPlaylist(tracks);
+            return playlistRepository.insertTracksFromPlaylist(tracks,id);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -72,9 +72,9 @@ public class PlaylistService {
         return this.playlistRepository.getAllPlaylists();
     }
 
-    public String getPlaylistID(String playlistName)
+    public String getPlaylistID(String playlistID)
     {
-        return playlistRepository.getPlaylistID(playlistName);
+        return playlistRepository.getPlaylistID(playlistID);
     }
 
     private Playlist deserializePlaylists(JsonNode item)

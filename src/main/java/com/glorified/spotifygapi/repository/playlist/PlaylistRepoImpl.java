@@ -84,14 +84,14 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
     }
 
     @Override
-    public String getPlaylistID(String playlistName) {
+    public String getPlaylistID(String playlistIDx) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
 
         try {
-            statement = this.newConnection().prepareStatement("SELECT tracks FROM playlists WHERE playlist_name = ?");
-            statement.setString(1, playlistName);
+            statement = this.newConnection().prepareStatement("SELECT tracks FROM playlists WHERE playlist_id = ?");
+            statement.setString(1, playlistIDx);
             resultSet = statement.executeQuery();
             String playlistID = "";
             while(resultSet.next())
@@ -106,7 +106,7 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
     }
 
     @Override
-    public List<Track> insertTracksFromPlaylist(List<Track> tracks) {
+    public List<Track> insertTracksFromPlaylist(List<Track> tracks, String id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -119,8 +119,13 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
                     "DELETE FROM tracks"
             );
             preparedStatement.executeUpdate();
-            String[] generatedColumns = {"id"};
+            preparedStatement = connection.prepareStatement(
+                    "DELETE FROM playlist_tracks"
+            );
+            preparedStatement.executeUpdate();
 
+            String[] generatedColumns = {"id"};
+            List<Integer> trackIDs = new ArrayList<>();
             for(Track track:tracks) {
                 preparedStatement = connection.prepareStatement(
                         "INSERT INTO tracks (added_at, added_by_href, added_by_id, duration, track_href, track_id, is_local, track_name, popularity, video_thumbnail, preview_url, artists_names, artists_ids, album_type, album_name, album_id, image_large, image_medium, image_small) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
@@ -146,9 +151,30 @@ public class PlaylistRepoImpl extends SqlAbstractRepository implements PlaylistR
                 preparedStatement.setString(18,track.getImageMedium());
                 preparedStatement.setString(19,track.getImageSmall());
 
+                preparedStatement.executeUpdate();
+                resultSet = preparedStatement.getGeneratedKeys();
+                while(resultSet.next())
+                {
+                    trackIDs.add(resultSet.getInt("id"));
+                }
+            }
+            preparedStatement = connection.prepareStatement("SELECT id FROM playlists WHERE playlist_id = ?");
+            preparedStatement.setString(1, id);
+            resultSet = preparedStatement.executeQuery();
+            int playlistId = 0;
+            while(resultSet.next())
+            {
+                playlistId = resultSet.getInt("id");
+            }
 
+            for(Integer trackId : trackIDs)
+            {
+                preparedStatement = connection.prepareStatement("INSERT INTO playlist_tracks (playlist_id, track_id) VALUES (?,?)");
+                preparedStatement.setInt(1,playlistId);
+                preparedStatement.setInt(2, trackId);
                 preparedStatement.executeUpdate();
             }
+
             return tracks;
         } catch (SQLException e) {
             throw new RuntimeException(e);

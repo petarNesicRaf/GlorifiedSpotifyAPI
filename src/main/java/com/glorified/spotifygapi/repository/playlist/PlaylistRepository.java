@@ -11,7 +11,7 @@ public interface PlaylistRepository {
 
     public List<Playlist> getAllPlaylists();
 
-    public String getPlaylistID(String playlistName);
+    public String getPlaylistID(String playlistID);
 
-    public List<Track> insertTracksFromPlaylist(List<Track> tracks);
+    public List<Track> insertTracksFromPlaylist(List<Track> tracks, String id);
 }

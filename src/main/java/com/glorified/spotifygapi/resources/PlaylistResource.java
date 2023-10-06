@@ -53,10 +53,10 @@ public class PlaylistResource {
 
 
     @GET
-    @Path("/tracks/{name}")
-    public Response getTracksFromPlaylist(@PathParam("name") String playlistName)
+    @Path("/tracks/{id}")
+    public Response getTracksFromPlaylist(@PathParam("id") String id)
     {
-        String playlistID = playlistService.getPlaylistID(playlistName);
+        String playlistID = playlistService.getPlaylistID(id);
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(playlistID);
         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
@@ -65,7 +65,7 @@ public class PlaylistResource {
             HttpResponse httpResponse = httpClient.execute(httpGet);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String responseBody = EntityUtils.toString(httpResponse.getEntity());
-                List<Track> tracks = playlistService.insertTracksFromPlaylist(responseBody);
+                List<Track> tracks = playlistService.insertTracksFromPlaylist(responseBody, id);
 
                 return Response.ok(tracks, MediaType.APPLICATION_JSON).build();
             } else {
