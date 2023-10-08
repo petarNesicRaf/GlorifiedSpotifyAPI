@@ -1,6 +1,7 @@
-package com.glorified.spotifygapi.resources;
+package com.glorified.spotifygapi.resources.local;
 
 import com.glorified.spotifygapi.models.track.TrackFeatures;
+import com.glorified.spotifygapi.resources.AuthenticationResource;
 import com.glorified.spotifygapi.service.TrackService;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -12,17 +13,14 @@ import org.apache.http.util.EntityUtils;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Path("/tracks")
-public class TrackResource {
+public class LocalTrackResource {
 
     @Inject
     TrackService trackService;

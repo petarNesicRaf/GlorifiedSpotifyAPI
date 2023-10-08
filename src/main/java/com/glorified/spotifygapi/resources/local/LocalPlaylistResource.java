@@ -1,7 +1,8 @@
-package com.glorified.spotifygapi.resources;
+package com.glorified.spotifygapi.resources.local;
 
 import com.glorified.spotifygapi.models.playlist.Playlist;
 import com.glorified.spotifygapi.models.track.Track;
+import com.glorified.spotifygapi.resources.AuthenticationResource;
 import com.glorified.spotifygapi.service.PlaylistService;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -20,11 +21,17 @@ import java.io.IOException;
 import java.util.List;
 
 @Path("/playlists")
-public class PlaylistResource {
+public class LocalPlaylistResource {
+
 
     @Inject
     PlaylistService playlistService;
 
+    //remote
+
+
+
+    //local
     @GET
     public Response fetchAndInsert() {
         HttpClient httpClient = HttpClients.createDefault();
@@ -77,11 +84,7 @@ public class PlaylistResource {
             throw new RuntimeException(e);
         }
     }
-    /*
-    public Response getPlaylistTrackFeatures(int playlistID)
-    {
-        playlistService.getPlaylistByID(playlistID);
-    }
 
-     */
+
+
 }
