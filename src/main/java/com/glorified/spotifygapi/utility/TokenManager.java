@@ -79,7 +79,7 @@ public class TokenManager {
 
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("grant_type","refresh_token"));
-        params.add(new BasicNameValuePair("refresh_token", this.getToken().getRefreshToken()));
+        params.add(new BasicNameValuePair("refresh_token", this.token.getRefreshToken()));
 
         refreshPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
         try {
