@@ -32,8 +32,7 @@ public class UserRepoImpl extends SqlAbstractRepository implements UserRepositor
                         resultSet.getInt("id"),
                         resultSet.getString("email"),
                         resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getString("token")
+                        resultSet.getString("password")
                 );
             }
 
@@ -61,14 +60,13 @@ public class UserRepoImpl extends SqlAbstractRepository implements UserRepositor
             String[] generatedColumns = {"id"};
 
             preparedStatement = connection.prepareStatement(
-                    "INSERT INTO users ( username, password,email, token) VALUES (?,?,?, ?)",
+                    "INSERT INTO users ( username, password,email) VALUES (?,?,?)",
                     generatedColumns
             );
 
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2,user.getPassword());
             preparedStatement.setString(3,user.getEmail());
-            preparedStatement.setString(4, user.getToken());
 
 
             preparedStatement.executeUpdate();
@@ -111,9 +109,7 @@ public class UserRepoImpl extends SqlAbstractRepository implements UserRepositor
                         resultSet.getInt("id"),
                         resultSet.getString("email"),
                         resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getString("token")
-
+                        resultSet.getString("password")
                 );
             }
         } catch (SQLException e) {

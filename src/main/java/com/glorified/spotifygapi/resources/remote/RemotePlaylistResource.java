@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -23,10 +24,11 @@ import java.util.List;
 public class RemotePlaylistResource {
 
     @GET
-    public Response fetchCurrentUserPlaylists() {
+    public Response fetchCurrentUserPlaylists(@QueryParam("access") String accessToken) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/me/playlists?limit=50&offset=0");
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+        //httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
         try {
             HttpResponse httpResponse = httpClient.execute(httpGet);

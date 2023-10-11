@@ -90,7 +90,8 @@ public class AuthenticationResource {
 
                 setAccessToken(responseBody);
 
-                // Parse the JSON response and return it
+                //access token treba da se vrati na front i uz svaki zahtev da se salje
+
                 return Response.ok(responseBody, MediaType.APPLICATION_JSON).build();
             } else {
                 URI errorUri = UriBuilder.fromUri("/#error=invalid_token").build();

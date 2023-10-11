@@ -27,10 +27,11 @@ public class RemoteTrackResource {
 
     @GET
     @Path("/playlist/{id}")
-    public Response fetchTracksFromPlaylist(@PathParam("id") String id) {
+    public Response fetchTracksFromPlaylist(@PathParam("id") String id, @QueryParam("access") String access) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/playlists/" + id + "/tracks");
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+        //httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + access);
 
         try {
             HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -60,7 +61,7 @@ public class RemoteTrackResource {
     //analysis?id=kdakdak&id=jadjdaj
     @GET
     @Path("/analysis")
-    public Response fetchTracksAnalysis(@QueryParam("id") List<String> ids)
+    public Response fetchTracksAnalysis(@QueryParam("id") List<String> ids, @QueryParam("access") String accessToken)
     {
         String list = "ids=";
         for(String s:ids)
@@ -73,7 +74,8 @@ public class RemoteTrackResource {
         HttpClient httpClient = HttpClients.createDefault();
 
         HttpGet httpGet = new HttpGet("https://api.spotify.com/v1/audio-features?"+list);
-        httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+       // httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationResource.tokenManager.getToken().getAccessToken());
+         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
         try {
             HttpResponse response = httpClient.execute(httpGet);

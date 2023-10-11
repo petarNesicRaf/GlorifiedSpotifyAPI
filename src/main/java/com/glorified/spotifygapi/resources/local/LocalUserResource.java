@@ -32,6 +32,8 @@ public class LocalUserResource {
             response.put("message", "These credentials do not match out records (Login)");
             return Response.status(422, "Unprocessable entity").entity(response).build();
         }
+
+
         response.put("jwt", jwt);
         return Response.ok(response).build();
     }
